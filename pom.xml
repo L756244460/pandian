@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <packaging>pom</packaging>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.3.11.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <groupId>com.secusoft</groupId>
+    <version>1.0.0</version>
+    <artifactId>yipandian</artifactId>
+    <description>易盘点</description>
+
+    <modules>
+        <module>yipandian-client</module>
+    </modules>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <secusoft.version>1.0.0</secusoft.version>
+        <easyexcel.version>3.1.1</easyexcel.version>
+        <hutool.version>5.8.3</hutool.version>
+        <fastjson.version>1.2.75</fastjson.version>
+        <druid.version>1.2.8</druid.version>
+        <jul.version>2.2.7</jul.version>
+        <assetcloud.message.version>1.0.4</assetcloud.message.version>
+        <assetcloud.authorization.version>1.5</assetcloud.authorization.version>
+        <alibaba.transmittable.version>2.2.0</alibaba.transmittable.version>
+        <xmlbeans.version>3.1.0</xmlbeans.version>
+        <nlp.version>1.7.2</nlp.version>
+        <ireport.version>6.18.0</ireport.version>
+        <lowagie.itext.version>4.2.2</lowagie.itext.version>
+        <liquibase.version>4.7.1</liquibase.version>
+        <dubbo.version>2.7.17</dubbo.version>
+        <nacos.version>2.1.1</nacos.version>
+        <rocketmq.starter.version>2.0.3</rocketmq.starter.version>
+        <mybatis-plus.version>3.4.1</mybatis-plus.version>
+        <pagehelper.version>1.3.0</pagehelper.version>
+        <aliyun.oss.version>2.8.2</aliyun.oss.version>
+        <apache.commons-collections4.version>4.4</apache.commons-collections4.version>
+        <commons-io.version>2.6</commons-io.version>
+        <commons-beanutils.version>1.9.4</commons-beanutils.version>
+        <apache.poi.version>4.1.1</apache.poi.version>
+        <pinyin4j.version>2.5.1</pinyin4j.version>
+        <easypoi.version>4.2.0</easypoi.version>
+        <org.mapstruct.version>1.5.2.Final</org.mapstruct.version>
+        <swagger.version>3.0.0</swagger.version>
+        <swagger.annotations.version>1.5.22</swagger.annotations.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>cn.afterturn</groupId>
+                <artifactId>easypoi-spring-boot-starter</artifactId>
+                <version>${easypoi.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.secusoft</groupId>
+                <artifactId>neikong-datacenter-interface</artifactId>
+                <version>${secusoft.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.org.assetcloud</groupId>
+                <artifactId>assetcloud-authorization</artifactId>
+                <version>${assetcloud.authorization.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.com.zstars</groupId>
+                <artifactId>cloud-message-spring-boot-starter</artifactId>
+                <version>${assetcloud.message.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-core</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-extra</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>easyexcel</artifactId>
+                <version>${easyexcel.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
+            </dependency>
+
+            <!--oss -->
+            <dependency>
+                <groupId>com.aliyun.oss</groupId>
+                <artifactId>aliyun-sdk-oss</artifactId>
+                <version>${aliyun.oss.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>${apache.commons-collections4.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
+            <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>${commons-beanutils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>${apache.poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${apache.poi.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/com.belerweb/pinyin4j -->
+            <dependency>
+                <groupId>com.belerweb</groupId>
+                <artifactId>pinyin4j</artifactId>
+                <version>${pinyin4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-core</artifactId>
+                <version>${liquibase.version}</version>
+            </dependency>
+
+            <!--   JUEL   -->
+            <dependency>
+                <groupId>de.odysseus.juel</groupId>
+                <artifactId>juel-spi</artifactId>
+                <version>${jul.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.odysseus.juel</groupId>
+                <artifactId>juel-impl</artifactId>
+                <version>${jul.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.odysseus.juel</groupId>
+                <artifactId>juel-parent</artifactId>
+                <version>${jul.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>transmittable-thread-local</artifactId>
+                <version>${alibaba.transmittable.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.apache.xmlbeans/xmlbeans -->
+            <dependency>
+                <groupId>org.apache.xmlbeans</groupId>
+                <artifactId>xmlbeans</artifactId>
+                <version>${xmlbeans.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.nlpcn</groupId>
+                <artifactId>nlp-lang</artifactId>
+                <version>${nlp.version}</version>
+            </dependency>
+            <!-- ireport -->
+            <dependency>
+                <groupId>net.sf.jasperreports</groupId>
+                <artifactId>jasperreports</artifactId>
+                <version>${ireport.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.sf.jasperreports</groupId>
+                <artifactId>jasperreports-functions</artifactId>
+                <version>${ireport.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.sf.jasperreports</groupId>
+                <artifactId>jasperreports-fonts</artifactId>
+                <version>${ireport.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.lowagie/itext -->
+            <dependency>
+                <groupId>com.lowagie</groupId>
+                <artifactId>itext</artifactId>
+                <version>${lowagie.itext.version}</version>
+                <type>pom</type>
+            </dependency>
+
+            <!--dubbo相关-->
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-spring-boot-starter</artifactId>
+                <version>${dubbo.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-registry-nacos</artifactId>
+                <version>${dubbo.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba.nacos</groupId>
+                <artifactId>nacos-client</artifactId>
+                <version>${nacos.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo</artifactId>
+                <version>${dubbo.version}</version>
+            </dependency>
+
+            <!-- rocketMQ相关 -->
+            <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-spring-boot-starter</artifactId>
+                <version>${rocketmq.starter.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${org.mapstruct.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-boot-starter</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${swagger.annotations.version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${org.mapstruct.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <distributionManagement>
+                <repository>
+                    <id>rdc-releases</id>
+                    <name>aliyun rdc-releases</name>
+                    <url>https://packages.aliyun.com/maven/repository/2256439-release-IFCi5X/</url>
+                </repository>
+                <snapshotRepository>
+                    <id>rdc-snapshots</id>
+                    <name>aliyun rdc-snapshots</name>
+                    <url>https://packages.aliyun.com/maven/repository/2256439-snapshot-Ll2Qln/</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
+    </profiles>
+
+</project>

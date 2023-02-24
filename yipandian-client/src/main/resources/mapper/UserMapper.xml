@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.datasset.yipandian.client.mapper.UserMapper">
+
+    <update id="enableAuthorization">
+        UPDATE ypd_user
+        <set>
+            status = '0',
+            update_time = now(),
+            update_user = #{updateUserId},
+        </set>
+        <where>
+            <if test="ids != null">
+                and id in
+                <foreach collection="ids" item="item" index="index" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </update>
+
+    <update id="disableAuthorization">
+        UPDATE ypd_user
+        <set>
+            status = '1',
+            update_time = now(),
+            update_user = #{updateUserId},
+        </set>
+        <where>
+            <if test="ids != null">
+                and id in
+                <foreach collection="ids" item="item" index="index" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </update>
+
+
+    <select id="authorizationList" resultType="cn.datasset.yipandian.client.model.user.UserPO">
+        SELECT
+        *
+        FROM ypd_user
+        <where>
+            and type = '0'
+            <if test="userDTO.beginTime != null and userDTO.endTime != null">
+                AND register_time BETWEEN #{userDTO.beginTime} AND #{userDTO.endTime}
+            </if>
+            <if test="userDTO.unitName!=null and userDTO.unitName!=''">
+                AND unit_Name LIKE concat("%",#{userDTO.unitName},"%")
+            </if>
+            <if test="userDTO.phoneNumber!=null and userDTO.phoneNumber!=''">
+                AND phone_Number LIKE concat("%",#{userDTO.phoneNumber},"%")
+            </if>
+        </where>
+        ORDER BY register_time DESC
+    </select>
+
+</mapper>

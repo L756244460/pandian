@@ -1,0 +1,10 @@
+server:
+  port: 21010
+  servlet:
+    context-path: /client
+spring:
+  application:
+    name: @project.artifactId@
+  profiles:
+    active: dev
+
