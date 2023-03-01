@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.datasset.yipandian.client.mapper.YpdDeptMapper">
+    <resultMap id="result_YpdDeptPO_Map" type="cn.datasset.yipandian.client.model.dept.YpdDeptVO">
+        <id column="id" property="id" />
+        <result column="status" property="status" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="agency_name" property="agencyName" />
+        <result column="agency_code" property="agencyCode" />
+        <result column="tenant_code" property="tenantCode" />
+        <result column="parent_id" property="parentId" />
+        <result column="create_user" property="createUser" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_user" property="updateUser" />
+        <collection column="{parentId=id,tenantCode = tenant_Code}" property="children" ofType="cn.datasset.yipandian.client.model.dept.YpdDeptVO"
+                    select="cn.datasset.yipandian.client.mapper.YpdDeptMapper.getDepTreeByParentId">
+        </collection>
+    </resultMap>
+
+    <resultMap id="result_YpdDeptPO_Map_2" type="cn.datasset.yipandian.client.model.dept.YpdDeptVO">
+        <id column="id" property="id" />
+        <result column="status" property="status" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="agency_name" property="agencyName" />
+        <result column="agency_code" property="agencyCode" />
+        <result column="tenant_code" property="tenantCode" />
+        <result column="parent_id" property="parentId" />
+        <result column="create_user" property="createUser" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_user" property="updateUser" />
+        <collection column="{parentId=id,tenantCode = tenant_Code}" property="children" ofType="cn.datasset.yipandian.client.model.dept.YpdDeptVO"
+                    select="com.secusoft.saas.data.mapper.YpdDeptMapper.getDepUserTreeByParentId">
+        </collection>
+
+        <collection column="id" property="ypdUserPos" ofType="cn.datasset.yipandian.client.model.user.YpdUserPO"
+                    select="com.secusoft.saas.data.mapper.YpdDeptMapper.getUserByDeptId">
+        </collection>
+    </resultMap>
+
+    <!-- 数据库中表名为:ypd_dept的列名 -->
+    <sql id="ypd_dept_Column" >
+		id,status,is_deleted,agency_name,agency_code,tenant_code,parent_id,create_user,create_time,update_time,update_user
+	</sql>
+
+    <select id="getDepTreeByTenantCode" resultMap="result_YpdDeptPO_Map">
+        select
+        <include refid="ypd_dept_Column" />
+        from ypd_dept
+        where tenant_code = #{tenantCode} and parent_id = '0'
+    </select>
+
+    <select id="getDepUserTreeByTenantCode" resultMap="result_YpdDeptPO_Map_2">
+        select
+        <include refid="ypd_dept_Column" />
+        from ypd_dept
+        where tenant_code = #{tenantCode} and parent_id = '0'
+    </select>
+
+    <select id="getDepTreeByParentId" resultMap="result_YpdDeptPO_Map">
+        select
+        <include refid="ypd_dept_Column" />
+        from ypd_dept
+        where parent_id = #{parentId}
+        <if test="tenantCode != null and tenantCode != ''">
+            AND tenant_code = #{tenantCode}
+        </if>
+    </select>
+
+    <select id="getDepUserTreeByParentId" resultMap="result_YpdDeptPO_Map_2">
+        select
+        <include refid="ypd_dept_Column" />
+        from ypd_dept
+        where parent_id = #{parentId}
+        <if test="tenantCode != null and tenantCode != ''">
+            AND tenant_code = #{tenantCode}
+        </if>
+    </select>
+
+    <select id="getUserByDeptId" resultType="cn.datasset.yipandian.client.model.user.YpdUserPO">
+        select id,user_id,tenant_code,real_name,user_code,user_email,user_photo
+        from ypd_user
+        where user_id in(
+        select
+        user_id
+        from ypd_dept_user
+        where agency_id = #{deptId} )
+    </select>
+    <select id="selectByUserId" resultType="cn.datasset.yipandian.client.model.dept.YpdDeptPO">
+        SELECT dp.id,dp.agency_name as agencyName from ypd_dept dp left join ypd_dept_user dpu on dpu.agency_id = dp.id
+        where dpu.user_id = #{userId}
+    </select>
+
+
+    <insert id="saveBatch">
+        insert into ypd_dept(id,status,is_deleted,agency_name,agency_code,tenant_code,parent_id,create_user,create_time,update_time,update_user) values
+        <foreach collection="list" item="item" separator=",">
+            ( #{item.id}, #{item.status}, #{item.isDeleted}, #{item.agencyName}, #{item.agencyCode}, #{item.tenantCode}, #{item.parentId}, #{item.createUser}, #{item.createTime}, #{item.updateTime}, #{item.updateUser})
+        </foreach>
+    </insert>
+
+</mapper>

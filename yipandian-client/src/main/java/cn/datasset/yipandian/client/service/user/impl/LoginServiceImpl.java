@@ -1,4 +1,4 @@
-package cn.datasset.yipandian.client.service.impl;
+package cn.datasset.yipandian.client.service.user.impl;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -13,12 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import cn.datasset.yipandian.client.code.ErrorCode;
 import cn.datasset.yipandian.client.common.ResultVO;
-import cn.datasset.yipandian.client.mapper.UserMapper;
-import cn.datasset.yipandian.client.model.user.UserDTO;
-import cn.datasset.yipandian.client.model.user.UserPO;
-import cn.datasset.yipandian.client.model.user.UserTokenInfo;
-import cn.datasset.yipandian.client.service.LoginService;
-import cn.datasset.yipandian.client.service.UserInfoService;
+import cn.datasset.yipandian.client.mapper.TenantMapper;
+import cn.datasset.yipandian.client.model.user.TenantDTO;
+import cn.datasset.yipandian.client.model.user.TenantPO;
+import cn.datasset.yipandian.client.model.user.TenantTokenInfo;
+import cn.datasset.yipandian.client.service.user.LoginService;
+import cn.datasset.yipandian.client.service.user.UserInfoService;
 import cn.datasset.yipandian.client.util.DESUtils;
 import cn.datasset.yipandian.client.util.RedisUtils;
 import com.auth0.jwt.JWT;
@@ -37,7 +37,7 @@ import org.springframework.stereotype.Service;
 public class LoginServiceImpl implements LoginService {
 
     @Resource
-    private UserMapper userMapper;
+    private TenantMapper tenantMapper;
 
     @Value("${deskey}")
     private String desKey;
@@ -53,35 +53,41 @@ public class LoginServiceImpl implements LoginService {
     UserInfoService userInfoService;
 
     @Override
-    public ResultVO register(UserPO userPO) {
+    public ResultVO register(TenantPO tenantPO) {
         //Base64解密
-        String password = new String(Base64.getDecoder().decode(userPO.getPassword()), StandardCharsets.UTF_8);
+        String password = new String(Base64.getDecoder().decode(tenantPO.getPassword()), StandardCharsets.UTF_8);
         //DES加密
         password = DESUtils.encrpt(desKey,password);
-        UserPO user = userMapper.selectOne(new QueryWrapper<UserPO>()
-            .eq("phone_number", userPO.getPhoneNumber())
+        TenantPO user = tenantMapper.selectOne(new QueryWrapper<TenantPO>()
+            .eq("phone_number", tenantPO.getPhoneNumber())
             .eq("password", password)
             .eq("status",0));
         if (null!=user){
             return ResultVO.fail(ErrorCode.REGISTER_NOTNULL);
         }
-        userPO.setPassword(password);
-        userPO.setCreateTime(new Date());
-        userPO.setCreateUser("123");
-        userPO.setRegisterTime(new Date());
-        if (userMapper.insert(userPO) > 0){
+        tenantPO.setPassword(password);
+        tenantPO.setCreateTime(new Date());
+        tenantPO.setCreateUser("123");
+        tenantPO.setRegisterTime(new Date());
+        if (tenantMapper.insert(tenantPO) > 0){
             return ResultVO.success();
         }
         return ResultVO.fail();
     }
 
     @Override
-    public ResultVO login(UserDTO dto, HttpServletResponse response) {
+    public ResultVO login(TenantDTO dto, HttpServletResponse response) {
+        //判断账号状态
+        TenantPO tenantPO = tenantMapper.selectOne(new QueryWrapper<TenantPO>()
+            .eq("phone_number", dto.getPhoneNumber()));
+        if (tenantPO.getStatus()==1){
+            return ResultVO.fail(ErrorCode.NUMBER_NOTLOGIN);
+        }
         //Base64解密
         String password = new String(Base64.getDecoder().decode(dto.getPassword()), StandardCharsets.UTF_8);
         //DES加密
         password = DESUtils.encrpt(desKey,password);
-        UserPO user = userMapper.selectOne(new QueryWrapper<UserPO>()
+        TenantPO user = tenantMapper.selectOne(new QueryWrapper<TenantPO>()
                 .eq("phone_number", dto.getPhoneNumber())
                 .eq("password", password)
                 .eq("status",0));
@@ -93,16 +99,16 @@ public class LoginServiceImpl implements LoginService {
         String key="ypd_admin_token_"+user.getId();
         redisUtils.setValueByKey(key,token,expire_time, TimeUnit.HOURS);
 
-        UserTokenInfo userInfo = new UserTokenInfo().setAccessToken(token)
+        TenantTokenInfo userInfo = new TenantTokenInfo().setAccessToken(token)
                 .setUserId(user.getId().toString())
                 .setName(user.getUnitName())
                 .setPhoneNumber(user.getPhoneNumber())
-                .setAdmin(user.getType() == 1);
+                .setAdmin(user.getType());
         return ResultVO.success(userInfo);
     }
 
     //生成token信息
-    private String signToken(Long id) {
+    private String signToken(String id) {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.HOUR,expire_time);
         Date date = calendar.getTime();
@@ -120,8 +126,8 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public ResultVO logout() {
-        UserPO userPO = userInfoService.getUserInfo();
-        String key="ypd_admin_token_"+userPO.getId();
+        TenantPO tenantPO = userInfoService.getUserInfo();
+        String key="ypd_admin_token_"+ tenantPO.getId();
         redisUtils.delete(key);
         return ResultVO.success();
     }

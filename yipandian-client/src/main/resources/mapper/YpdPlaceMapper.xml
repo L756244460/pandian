@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.datasset.yipandian.client.mapper.YpdPlaceMapper">
+
+
+    <select id="selectReuseList" resultType="cn.datasset.yipandian.client.model.place.YpdPlacePO">
+        SELECT
+        id,
+        tenant_id,
+        place_no
+        FROM ypd_place
+        WHERE tenant_id = #{tenantId}
+        AND deleted = 1
+        <if test="flag">
+            AND pid = 0
+        </if>
+        <if test="!flag">
+            AND pid = #{id}
+        </if>
+    </select>
+</mapper>

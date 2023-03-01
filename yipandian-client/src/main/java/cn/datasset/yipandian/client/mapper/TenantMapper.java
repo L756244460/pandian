@@ -2,11 +2,10 @@ package cn.datasset.yipandian.client.mapper;
 
 import java.util.List;
 
-import cn.datasset.yipandian.client.model.user.UserDTO;
-import cn.datasset.yipandian.client.model.user.UserPO;
+import cn.datasset.yipandian.client.model.user.TenantDTO;
+import cn.datasset.yipandian.client.model.user.TenantPO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -14,8 +13,8 @@ import org.apache.ibatis.annotations.Param;
  * @author: Created by lzl
  */
 @Mapper
-public interface UserMapper extends BaseMapper<UserPO> {
-    IPage<UserPO> authorizationList(@Param("page") Page<Object> objectPage, @Param("userDTO") UserDTO userDTO);
+public interface TenantMapper extends BaseMapper<TenantPO> {
+    IPage<TenantPO> authorizationList(@Param("page") IPage<Object> objectPage, @Param("tenantDTO") TenantDTO tenantDTO);
 
     int enableAuthorization(@Param("ids") List<String> ids, @Param("updateUserId") String updateUserId);
 

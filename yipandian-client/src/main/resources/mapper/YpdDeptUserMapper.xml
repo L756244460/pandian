@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.datasset.yipandian.client.mapper.YpdDeptUserMapper">
+    <!-- 数据库中表名为:ypd_dept_user的列名 -->
+    <sql id="ypd_dept_user_Column">
+		id,agency_id,user_id,tenant_code,gmt_create
+	</sql>
+
+    <insert id="saveBatch" parameterType="ArrayList">
+        insert into ypd_dept_user(id,agency_id,user_id,tenant_code) values
+        <foreach collection="list" item="item" index="index"
+                 separator=",">
+            (#{item.id},#{item.agencyId},#{item.userId},#{item.tenantCode})
+        </foreach>
+    </insert>
+
+    <select id="selectDeptByUserId" resultType="cn.datasset.yipandian.client.model.dept.YpdDeptVO">
+        select b.agency_name,b.agency_code,b.id,b.tenant_code
+        from ypd_dept_user a left join
+        ypd_dept b on a.agency_id = b.id
+        where a.user_id = #{userid}
+    </select>
+    
+    <select id="selectDeptUserList" resultType="cn.datasset.yipandian.client.model.dept.YpdDeptUserRespVO">
+        select
+            zu.user_id as userId,
+            zu.user_code as userCode,
+            zu.real_name as realName,
+            zu.id_card as idCard,
+            zu.phone_number as phoneNumber,
+            zu.user_email as userEmail,
+            zu.street_address as streetAddress,
+            zu.gender
+        from ypd_user zu
+        where zu.tenant_code = #{condition.tenantCode}
+        <if test="condition.gender != null">
+            and zu.gender = #{condition.gender}
+        </if>
+        <if test="condition.id != null">
+            and exists(select * from ypd_dept_user zdu  where zdu.user_id = zu.user_id and zdu.agency_id = #{condition.id})
+        </if>
+        <if test="condition.idCard != null">
+            and zu.id_card like concat('%', #{condition.idCard}, '%')
+        </if>
+        <if test="condition.phoneNumber != null">
+            and zu.phone_number like concat('%', #{condition.phoneNumber}, '%')
+        </if>
+        <if test="condition.realName != null">
+            and zu.real_name like concat('%', #{condition.realName}, '%')
+        </if>
+        <if test="condition.userCode != null">
+            and zu.user_code like concat('%', #{condition.userCode}, '%')
+        </if>
+        <if test="condition.userEmail != null">
+            and zu.user_email like concat('%', #{condition.userEmail}, '%')
+        </if>
+        <if test="condition.streetAddress != null">
+            and zu.street_address like concat('%', #{condition.streetAddress}, '%')
+        </if>
+    </select>
+
+</mapper>

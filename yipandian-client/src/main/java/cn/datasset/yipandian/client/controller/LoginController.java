@@ -5,14 +5,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import cn.datasset.yipandian.client.code.ErrorCode;
 import cn.datasset.yipandian.client.common.ResultVO;
-import cn.datasset.yipandian.client.model.user.UserDTO;
-import cn.datasset.yipandian.client.model.user.UserPO;
-import cn.datasset.yipandian.client.service.LoginService;
-import cn.datasset.yipandian.client.service.UserInfoService;
+import cn.datasset.yipandian.client.model.user.TenantDTO;
+import cn.datasset.yipandian.client.model.user.TenantPO;
+import cn.datasset.yipandian.client.service.user.LoginService;
+import cn.datasset.yipandian.client.service.user.UserInfoService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -34,14 +35,14 @@ public class LoginController {
     UserInfoService userInfoService;
     /**
      * 用户授权/注册
-     * @param userPO
+     * @param tenantPO
      */
     @PostMapping("/register")
-    public ResultVO register(@RequestBody UserPO userPO){
-        if(StringUtils.isEmpty(userPO.getPhoneNumber())||StringUtils.isEmpty(userPO.getPassword())){
+    public ResultVO register(@RequestBody TenantPO tenantPO){
+        if(StringUtils.isEmpty(tenantPO.getPhoneNumber())||StringUtils.isEmpty(tenantPO.getPassword())){
             return ResultVO.fail(ErrorCode.PARAM_NULL);
         }
-        return loginService.register(userPO);
+        return loginService.register(tenantPO);
     }
 
 
@@ -49,11 +50,14 @@ public class LoginController {
      * 用户登录
      */
     @PostMapping("/login")
-    public ResultVO login(@RequestBody UserDTO dto, HttpServletResponse response){
-        if(StringUtils.isEmpty(dto.getPhoneNumber())||StringUtils.isEmpty(dto.getPassword())){
+    public ResultVO login(@RequestParam String phoneNumber,@RequestParam String password, HttpServletResponse response){
+        if(StringUtils.isEmpty(phoneNumber)||StringUtils.isEmpty(password)){
             return ResultVO.fail(ErrorCode.PARAM_NULL);
         }
-        return loginService.login(dto,response);
+        TenantDTO tenantDTO =new TenantDTO();
+        tenantDTO.setPassword(password);
+        tenantDTO.setPhoneNumber(phoneNumber);
+        return loginService.login(tenantDTO,response);
     }
 
     /**

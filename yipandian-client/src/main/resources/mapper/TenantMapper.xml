@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="cn.datasset.yipandian.client.mapper.UserMapper">
+<mapper namespace="cn.datasset.yipandian.client.mapper.TenantMapper">
 
     <update id="enableAuthorization">
-        UPDATE ypd_user
+        UPDATE ypd_tenant
         <set>
             status = '0',
             update_time = now(),
@@ -20,7 +20,7 @@
     </update>
 
     <update id="disableAuthorization">
-        UPDATE ypd_user
+        UPDATE ypd_tenant
         <set>
             status = '1',
             update_time = now(),
@@ -37,20 +37,20 @@
     </update>
 
 
-    <select id="authorizationList" resultType="cn.datasset.yipandian.client.model.user.UserPO">
+    <select id="authorizationList" resultType="cn.datasset.yipandian.client.model.user.TenantPO">
         SELECT
         *
-        FROM ypd_user
+        FROM ypd_tenant
         <where>
             and type = '0'
-            <if test="userDTO.beginTime != null and userDTO.endTime != null">
-                AND register_time BETWEEN #{userDTO.beginTime} AND #{userDTO.endTime}
+            <if test="tenantDTO.beginTime != null and tenantDTO.endTime != null">
+                AND register_time BETWEEN #{tenantDTO.beginTime} AND #{tenantDTO.endTime}
             </if>
-            <if test="userDTO.unitName!=null and userDTO.unitName!=''">
-                AND unit_Name LIKE concat("%",#{userDTO.unitName},"%")
+            <if test="tenantDTO.unitName!=null and tenantDTO.unitName!=''">
+                AND unit_Name LIKE concat("%",#{tenantDTO.unitName},"%")
             </if>
-            <if test="userDTO.phoneNumber!=null and userDTO.phoneNumber!=''">
-                AND phone_Number LIKE concat("%",#{userDTO.phoneNumber},"%")
+            <if test="tenantDTO.phoneNumber!=null and tenantDTO.phoneNumber!=''">
+                AND phone_Number LIKE concat("%",#{tenantDTO.phoneNumber},"%")
             </if>
         </where>
         ORDER BY register_time DESC

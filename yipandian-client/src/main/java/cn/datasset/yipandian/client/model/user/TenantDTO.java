@@ -20,7 +20,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class UserDTO extends Page {
+public class TenantDTO extends Page {
     /**
      * id
      */

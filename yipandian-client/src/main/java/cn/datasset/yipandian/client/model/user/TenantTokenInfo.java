@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class UserTokenInfo {
+public class TenantTokenInfo {
 
     /**
      * 用户登录的token
@@ -38,6 +38,6 @@ public class UserTokenInfo {
     private String name;
 
     @JsonProperty("isAdmin")
-    private Boolean admin;
+    private Integer admin;
 
 }

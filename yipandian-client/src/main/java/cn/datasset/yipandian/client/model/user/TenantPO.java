@@ -1,7 +1,10 @@
 package cn.datasset.yipandian.client.model.user;
 
+import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
+import cn.datasset.yipandian.client.model.dept.YpdDeptVO;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -24,13 +27,13 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-@TableName("ypd_user")
-public class UserPO {
+@TableName("ypd_tenant")
+public class TenantPO implements Serializable {
     /**
      * id
      */
     @TableId(type = IdType.ASSIGN_ID)
-    private Long id;
+    private String id;
     /**
      * 电话号码
      */
@@ -84,6 +87,7 @@ public class UserPO {
     /**
      * 注册时间
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date registerTime;
 
     /**
@@ -96,5 +100,11 @@ public class UserPO {
      * 授权码
      */
     private String authorizationCode;
+    @TableField(exist = false)
+    private List<YpdDeptUserPO> userAndDept;
+    @TableField(exist = false)
+    private List<YpdDeptVO> dept;
+    @TableField(exist = false)
+    private List<YpdUserPO> user;
 
 }

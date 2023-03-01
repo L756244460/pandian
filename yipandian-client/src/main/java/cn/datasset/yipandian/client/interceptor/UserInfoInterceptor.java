@@ -11,11 +11,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.ttl.TransmittableThreadLocal;
 
 import cn.datasset.yipandian.client.model.user.UserInfo;
-import cn.datasset.yipandian.client.service.UserInfoService;
+import cn.datasset.yipandian.client.service.user.UserInfoService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -36,7 +35,7 @@ public class UserInfoInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String userId = request.getHeader("user-id");
+        String userId = request.getHeader("userId");
         //这里要判断该userId是否存在用户表中 还是 调用接口查询
         if (StringUtils.isEmpty(userId) || !userInfoService.userExist(userId)) {
             response.setContentType("application/json;charset=utf-8");

@@ -65,6 +65,7 @@ public enum  ErrorCode {
     LOGIN_PARAM_NULL(414, "用户名或密码不得为空"),
     LOGIN_INCORRECT(416, "用户名或密码不正确"),
     REGISTER_NOTNULL(445, "该账号已被创建"),
+    NUMBER_NOTLOGIN(446, "账号已失效"),
     LOGIN_TOKEN_INVALID(417, "token无效"),
     SYNC_FAILED(415, "同步失败!"),
     SYNC_FAILED_ASSET_REGISTER(415, "资产登记至财政端失败!"),
